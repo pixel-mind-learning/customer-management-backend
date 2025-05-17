@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * @author maleeshasa
+ * @Date 2025-05-18
+ */
 @Setter
 @Getter
 @Entity

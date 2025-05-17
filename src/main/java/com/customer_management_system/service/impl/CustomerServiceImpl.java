@@ -33,6 +33,10 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author maleeshasa
+ * @Date 2025-05-18
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -43,10 +47,17 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper customerMapper;
     private final CustomerHasDependantMapper customerHasDependantMapper;
 
+    /**
+     * This method is allowed to create or modify customer
+     *
+     * @param customerRequest {@link CustomerRequestDTO} - customer request
+     * @return {@link CommonResponse} - created or modifies customer response
+     * @author @maleeshasa
+     */
     @Transactional
     @Override
     public CommonResponse createOrModify(CustomerRequestDTO customerRequest) {
-
+        log.info("CustomerServiceImpl.createOrModify() => started.");
         String message;
 
         // Validate customer creation
@@ -56,6 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer != null) {
             message = "Customer is updated.";
 
+            // De-activating previous customer details
             customer.getCustomerHasMobileNumbers().forEach(c -> c.setActive(Boolean.FALSE));
             customer.getCustomerHasDependants().forEach(c -> c.setActive(Boolean.FALSE));
             customer.getCustomerHasAddresses().forEach(c -> c.setActive(Boolean.FALSE));
@@ -70,7 +82,6 @@ public class CustomerServiceImpl implements CustomerService {
         );
 
         try {
-
             mappedCustomer.setCustomerHasDependants(customerHasDependantMapper.mapToEntities(
                     customerRequest.getCustomerHasDependantRequest(),
                     mappedCustomer,
@@ -87,8 +98,16 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    /**
+     * This method is allowed to fetch customer by id
+     *
+     * @param customerId {@link Long} - customer id
+     * @return {@link CommonResponse} - fetched customer response by id
+     * @author @maleeshasa
+     */
     @Override
     public CommonResponse getById(Long customerId) {
+        log.info("CustomerServiceImpl.getById() => started.");
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RecordNotFoundException("Customer not found."));
 
@@ -99,8 +118,16 @@ public class CustomerServiceImpl implements CustomerService {
         );
     }
 
+    /**
+     * This method is allowed to get all customers with page
+     *
+     * @param of {@link PageRequest} - page request
+     * @return {@link CommonResponse} - fetched customers with pagination
+     * @author @maleeshasa
+     */
     @Override
     public CommonResponse getAllWithPage(PageRequest of) {
+        log.info("CustomerServiceImpl.getAllWithPage() => started.");
         CommonResponse commonResponse = new CommonResponse();
         Page<Customer> customers = customerRepository.findAll(of);
         if (!customers.isEmpty()) {
@@ -126,8 +153,16 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    /**
+     * This method is allowed to upload bulk customers using excel file
+     *
+     * @param file {@link MultipartFile} - excel file with customer details
+     * @return {@link CommonResponse} - uploaded response
+     * @author @maleeshasa
+     */
     @Override
     public CommonResponse bulkUpload(MultipartFile file) {
+        log.info("CustomerServiceImpl.bulkUpload() => started.");
         try (InputStream inputStream = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(inputStream)) {
 

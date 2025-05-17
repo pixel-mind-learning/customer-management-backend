@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author maleeshasa
+ * @Date 2025-05-18
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -25,8 +29,15 @@ public class LocationServiceImpl implements LocationService {
     private final CountryMapper countryMapper;
     private final CityMapper cityMapper;
 
+    /**
+     * This method is allowed to fetch all countries
+     *
+     * @return {@link CommonResponse} - fetched countries response
+     * @author @maleeshasa
+     */
     @Override
     public CommonResponse getAllCountries() {
+        log.info("LocationServiceImpl.getAllCountries() => started.");
         List<Country> countries = countryRepository.findAll();
         if (!countries.isEmpty()) {
             return new CommonResponse(HttpStatus.OK, "Countries retrieved successfully", countryMapper.mapToDTOs(countries));
@@ -35,8 +46,15 @@ public class LocationServiceImpl implements LocationService {
         }
     }
 
+    /**
+     * This method is allowed to fetch all cities
+     *
+     * @return {@link CommonResponse} - fetched cities response
+     * @author @maleeshasa
+     */
     @Override
     public CommonResponse getAllCities() {
+        log.info("LocationServiceImpl.getAllCities() => started.");
         List<City> cities = cityRepository.findAll();
         if (!cities.isEmpty()) {
             return new CommonResponse(HttpStatus.OK, "Cities retrieved successfully", cityMapper.mapToDTOs(cities));

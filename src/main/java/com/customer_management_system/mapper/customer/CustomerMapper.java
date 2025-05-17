@@ -11,12 +11,18 @@ import com.customer_management_system.model.customer.CustomerHasDependant;
 import com.customer_management_system.repository.customer.CustomerRepository;
 import com.customer_management_system.service.validation.CustomerValidation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author maleeshasa
+ * @Date 2025-05-18
+ */
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class CustomerMapper {
@@ -27,6 +33,7 @@ public class CustomerMapper {
     private final CustomerValidation customerValidation;
 
     public Customer mapToEntity(Customer customer, CustomerRequestDTO dto) {
+        log.info("CustomerMapper.mapToEntity() => started");
         customer.setName(dto.getName());
         customer.setNic(dto.getNic());
         customer.setDateOfBirth(dto.getDateOfBirth());
@@ -38,10 +45,12 @@ public class CustomerMapper {
         customer.setCustomerHasMobileNumbers(
                 new HashSet<>(customerHasMobileNumberMapper.mapToEntities(dto.getCustomerHasMobileNumberRequest(), customer))
         );
+        log.info("CustomerMapper.mapToEntity() => ended");
         return customer;
     }
 
     public List<Customer> mapToDependantEntities(List<CustomerHasDependantRequestDTO> dependants) {
+        log.info("CustomerMapper.mapToDependantEntities() => started");
         return dependants.stream()
                 .map(dto -> {
                     Customer dependant = customerRepository.findByNic(dto.getNic());
@@ -62,12 +71,14 @@ public class CustomerMapper {
                     // Validate dependant
                     customerValidation.validateCustomerCreation(customerReq);
 
+                    log.info("CustomerMapper.mapToDependantEntities() => ended");
                     return mapToEntity(dependant, customerReq);
                 })
                 .collect(Collectors.toList());
     }
 
     public List<DependantResponseDTO> mapToDependantDTOs(List<CustomerHasDependant> dependants) {
+        log.info("CustomerMapper.mapToDependantDTOs() => started");
         return dependants.stream()
                 .filter(CustomerHasDependant::getActive)
                 .map(dependant -> {
@@ -86,6 +97,7 @@ public class CustomerMapper {
     }
 
     public CustomerResponseDTO mapToDTO(CustomerResponseDTO dto, Customer customer) {
+        log.info("CustomerMapper.mapToDTO() => started");
         dto.setId(customer.getId());
         dto.setName(customer.getName());
         dto.setNic(customer.getNic());
@@ -93,10 +105,12 @@ public class CustomerMapper {
         dto.setAddresses(customerHasAddressMapper.mapToDTOs(customer.getCustomerHasAddresses()));
         dto.setDependants(mapToDependantDTOs(customer.getCustomerHasDependants()));
         dto.setMobileNumbers(customerHasMobileNumberMapper.mapToDTOs(customer.getCustomerHasMobileNumbers()));
+        log.info("CustomerMapper.mapToDTO() => ended.");
         return dto;
     }
 
     public List<CustomerResponseDTO> mapToDTOs(List<Customer> customers) {
+        log.info("CustomerMapper.mapToDTOs() => started");
         return customers.stream()
                 .map(customer -> {
                     CustomerResponseDTO dto = new CustomerResponseDTO();
