@@ -22,9 +22,9 @@ This is the backend service for the Customer Management System, built with **Spr
 - Cities and Countries are stored in master tables (preloaded via DML)
 
 ## 🗃️ Entity Relationships
-- `Customer` ↔ `Address` (One-to-Many)
-- `Customer` ↔ `MobileNumber` (One-to-Many)
-- `Customer` ↔ `Customer` (Family Members - Self-referencing)
+- `Customer` ↔ `CustomerHasAddress` (One-to-Many)
+- `Customer` ↔ `CustomerHasMobileNumber` (One-to-Many)
+- `Customer` ↔ `CustomerHasDependant` (One-to-Many)
 
 ## ⚙️ Getting Started
 
