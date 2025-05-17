@@ -18,7 +18,7 @@ public class CountryMapper {
         return dto;
     }
 
-    public List<CountryResponseDTO> mapToDTO(List<Country> countries) {
+    public List<CountryResponseDTO> mapToDTOs(List<Country> countries) {
         return countries.stream()
                 .map(country -> {
                     CountryResponseDTO dto = new CountryResponseDTO();

@@ -17,7 +17,7 @@ public class CityMapper {
         return dto;
     }
 
-    public List<CityResponseDTO> mapToDTO(List<City> cities) {
+    public List<CityResponseDTO> mapToDTOs(List<City> cities) {
         return cities.stream()
                 .map(city -> {
                     CityResponseDTO dto = new CityResponseDTO();

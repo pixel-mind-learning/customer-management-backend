@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/customer/v1")
@@ -17,17 +18,17 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @PostMapping(value = "/createOrModify")
+    @PostMapping(value = "/create-or-modify")
     public ResponseEntity<CommonResponse> createOrModify(@RequestBody CustomerRequestDTO customerRequest) {
         return ResponseEntity.ok(customerService.createOrModify(customerRequest));
     }
 
-    @GetMapping(value = "/getById/{customerId}")
+    @GetMapping(value = "/get-by-id/{customerId}")
     public ResponseEntity<CommonResponse> getById(@PathVariable Long customerId) {
         return ResponseEntity.ok(customerService.getById(customerId));
     }
 
-    @GetMapping(value = "/getAllWithPage")
+    @GetMapping(value = "/get-all-with-page")
     public ResponseEntity<CommonResponse> getAllWithPage(@RequestParam(value = "page") int page,
                                                          @RequestParam(value = "size") int size) {
         return ResponseEntity.ok(customerService.getAllWithPage(PageRequest.of(page, size)));
