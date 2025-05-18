@@ -10,7 +10,6 @@ import com.customer_management_system.model.customer.Customer;
 import com.customer_management_system.model.customer.CustomerHasDependant;
 import com.customer_management_system.repository.customer.CustomerRepository;
 import com.customer_management_system.service.validation.CustomerValidation;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
  * @Date 2025-05-18
  */
 @Slf4j
-@RequiredArgsConstructor
 @Component
 public class CustomerMapper {
 
@@ -31,6 +29,16 @@ public class CustomerMapper {
     private final CustomerHasMobileNumberMapper customerHasMobileNumberMapper;
     private final CustomerRepository customerRepository;
     private final CustomerValidation customerValidation;
+
+    public CustomerMapper(CustomerHasAddressMapper customerHasAddressMapper,
+                          CustomerHasMobileNumberMapper customerHasMobileNumberMapper,
+                          CustomerRepository customerRepository,
+                          CustomerValidation customerValidation) {
+        this.customerHasAddressMapper = customerHasAddressMapper;
+        this.customerHasMobileNumberMapper = customerHasMobileNumberMapper;
+        this.customerRepository = customerRepository;
+        this.customerValidation = customerValidation;
+    }
 
     public Customer mapToEntity(Customer customer, CustomerRequestDTO dto) {
         log.info("CustomerMapper.mapToEntity() => started");
